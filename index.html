@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stuitersite</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw; /* Volledige viewportbreedte */
+            height: 100vh; /* Volledige viewportheight */
+            background-color: #f0f0f0;
+        }
+
+        .circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            /* top en left worden dynamisch ingesteld */
+            transform: translate(-50%, -50%);
+        }
+
+        #addButton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"></div>
+    <button id="addButton">Voeg bal toe</button>
+
+    <script>
+        const container = document.querySelector('.container');
+        const colors = ['#FF5733', '#C70039', '#900C3F', '#581845', '#FFC300'];
+
+        function getRandomSpeed() {
+            return (Math.random() - 0.5) * 6;
+        }
+
+        function getRandomColor() {
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createCircle() {
+            const circle = document.createElement('div');
+            circle.classList.add('circle');
+
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+
+            const speedX = getRandomSpeed();
+            const speedY = getRandomSpeed();
+
+            const color = getRandomColor();
+            circle.style.backgroundColor = color;
+
+            circle.style.left = posX + '%';
+            circle.style.top = posY + '%';
+
+            container.appendChild(circle);
+
+            animateCircle(circle, posX, posY, speedX, speedY);
+        }
+
+        function animateCircle(circle, posX, posY, speedX, speedY) {
+            function updatePosition() {
+                posX += speedX;
+                posY += speedY;
+
+                if (posX <= 0 || posX >= 100) {
+                    speedX *= -1;
+                }
+                if (posY <= 0 || posY >= 100) {
+                    speedY *= -1;
+                }
+
+                circle.style.left = posX + '%';
+                circle.style.top = posY + '%';
+                
+                requestAnimationFrame(updatePosition);
+            }
+
+            updatePosition();
+        }
+
+        document.getElementById('addButton').addEventListener('click', createCircle);
+    </script>
+</body>
+</html>
